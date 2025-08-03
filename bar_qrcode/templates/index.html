@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head><title>Mesas</title></head>
+<body>
+  <h1>Mesas</h1>
+  <ul>
+    {% for mesa in mesas %}
+      <li>Mesa {{ mesa.numero }}
+        <br>
+        {% set qr_path = 'qrcodes/mesa_' ~ mesa.id ~ '.png' %}
+<img src="{{ url_for('static', filename=qr_path) }}" width="100" onerror="this.style.display='none';">
+
+      </li>
+    {% endfor %}
+  </ul>
+""
+  <form action="/criar_mesa/">
+    <input name="numero" type="number" placeholder="Número da Mesa">
+    <button type="submit">Criar Mesa</button>
+  </form>
+</body>
+</html>

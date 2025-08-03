@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Comanda da Mesa {{ comanda.mesa.numero }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2, h3 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            max-width: 500px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Comanda da Mesa {{ comanda.mesa.numero }}</h2>
+
+    <form action="{{ url_for('adicionar_item', comanda_id=comanda.id) }}" method="post">
+        <label for="produto">Produto:</label>
+        <select name="produto_id" required>
+            {% for produto in produtos %}
+                <option value="{{ produto.id }}">{{ produto.nome }} - R$ {{ "%.2f"|format(produto.preco) }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" name="quantidade" min="1" value="1" required>
+
+        <button type="submit">Adicionar à Comanda</button>
+    </form>
+
+    <h3>Itens da Comanda:</h3>
+    <ul>
+        {% for item in pedidos %}
+            <li>{{ item.produto.nome }} x{{ item.quantidade }} = R$ {{ "%.2f"|format(item.quantidade * item.produto.preco) }}</li>
+        {% endfor %}
+    </ul>
+
+    <p class="total">Total: R$ {{ "%.2f"|format(total) }}</p>
+
+    <form action="{{ url_for('ver_comanda', mesa_id=comanda.mesa.id) }}" method="post">
+        <input type="hidden" name="fechar_comanda" value="1">
+        <button type="submit">Fechar Comanda</button>
+    </form>
+
+</body>
+</html>

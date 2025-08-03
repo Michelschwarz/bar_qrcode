@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>Recibo</title></head>
+<body>
+  <h1>Recibo - Mesa {{ comanda.mesa_id }}</h1>
+  <p>Comanda Nº {{ comanda.id }}</p>
+
+  <h2>Itens:</h2>
+  <ul>
+    {% for pedido in pedidos %}
+      <li>{{ pedido.quantidade }}x {{ pedido.produto.nome }} - R$ {{ "%.2f"|format(pedido.produto.preco * pedido.quantidade) }}</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Total: R$ {{
+    "%.2f"|format(pedidos | map(attribute='produto') | map(attribute='preco') | sum) }}</h3>
+
+  <p><strong>Obrigado pela preferência!</strong></p>
+  <a href="{{ url_for('index') }}">Voltar para as mesas</a>
+</body>
+</html>
